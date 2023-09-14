@@ -305,6 +305,3 @@ following command can be executed:
 ```bash
 gvm-cli socket --socketpath /tmp/gvm/gvmd/gvmd.sock --pretty --xml "<get_version/>"
 ```
-
-```{include} /22.4/container/manual-feed-sync.md
-```
