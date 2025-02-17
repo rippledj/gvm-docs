@@ -4,21 +4,23 @@
    .. code-block::
      :caption: Building gvmd
 
-     mkdir -p $BUILD_DIR/gvmd && cd $BUILD_DIR/gvmd
+     mkdir -p $BUILD_DIR/gvmd
 
-     cmake $SOURCE_DIR/gvmd-$GVMD_VERSION \
+     cmake \
+       -S $SOURCE_DIR/gvmd-$GVMD_VERSION \
+       -B $BUILD_DIR/gvmd \
        -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
        -DCMAKE_BUILD_TYPE=Release \
        -DLOCALSTATEDIR=/var \
        -DSYSCONFDIR=/etc \
        -DGVM_DATA_DIR=/var \
+       -DGVM_LOG_DIR=/var/log/gvm \
        -DGVMD_RUN_DIR=/run/gvmd \
        -DOPENVAS_DEFAULT_SOCKET=/run/ospd/ospd-openvas.sock \
        -DGVM_FEED_LOCK_PATH=/var/lib/gvm/feed-update.lock \
-       -DSYSTEMD_SERVICE_DIR=/lib/systemd/system \
        -DLOGROTATE_DIR=/etc/logrotate.d
 
-     make -j$(nproc)
+     cmake --build $BUILD_DIR/gvmd -j$(nproc)
 
   .. tab:: Fedora/CentOS
    .. code-block::
@@ -32,6 +34,7 @@
        -DLOCALSTATEDIR=/var \
        -DSYSCONFDIR=/etc \
        -DGVM_DATA_DIR=/var \
+       -DGVM_LOG_DIR/var/log/gvm \
        -DGVMD_RUN_DIR=/run/gvmd \
        -DOPENVAS_DEFAULT_SOCKET=/run/ospd/ospd-openvas.sock \
        -DGVM_FEED_LOCK_PATH=/var/lib/gvm/feed-update.lock \
@@ -50,7 +53,7 @@
    .. code-block::
      :caption: Installing gvmd
 
-     mkdir -p $INSTALL_DIR/gvmd
+     mkdir -p $INSTALL_DIR/gvmd && cd $BUILD_DIR/gvmd
 
      make DESTDIR=$INSTALL_DIR/gvmd install
 

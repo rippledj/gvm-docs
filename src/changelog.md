@@ -6,6 +6,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Calendar Versioning](https://calver.org).
 
 ## Latest
+
+* Fix file path to compose file in setup and start script
+* Update openvas-smb dependency from heimdal-dev to heimdal-multidev
+* Update openvas-scanner dependency from libkrb5-dev to krb5-multidev
+* Update openvas-scanner and openvasd to 23.15.3
+* Remove fedora in openvas-smb.
+* Fix openvasd path to binaries after file path structure changes.
+* Call `systemctl daemon-reload` after all service files are installed
+* Update gvm-libs to 22.17.0
+* Update gvmd to 25.0.0
+* Update pg-gvm to 22.6.7
+* Update gsad to 24.2.0 and support brotli compression
+* Update GSA to 24.2.0 and the description
+* Drop python3-defusedxml from dependencies of gvm-tools
+* Simplify instructions for setting up sudo
+* Update docker compose file for using the 24.10 feed release
+* Add libcjson dependency for gvm-libs
+
+## 25.1.0 - 2025-01-09
+
 * Corrected the path for moving the openvasd built files
 * Add instructions for Kali Linux installation
 * Add instructions to enable SSL/TLS
@@ -25,8 +45,18 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Update GSA to 23.0.0
 * Update OpenVAS Scanner to 23.0.1
 * Drop notus-scanner in favor of the new OpenVAS Daemon (openvasd). This made the Mosquitto MQTT broker obsolete too.
+* Drop mention of obsolete dependency on xml-twig-tools / perl-XML-Twig
+* Changed container registry from DockerHub to registry.community.greenbone.net
+in compose file
+* Update supported Ubuntu version for docker compose guide to 24.04
+* Use unversioned `docker-compose.yml` file for the download
+* Set [docker compose project](https://docs.docker.com/reference/compose-file/version-and-name/#name-top-level-element)
+via compose file. This allows to remove the `-p greenbone-community-edition`
+argument from all docker compose commands.
+* Update image names in examples where the compose file is adjusted
 
-## 23.11.0
+## 23.11.0 - 23-11-21
+
 * Add workflow page for source builds
 * Add documentation for updating source builds
 * Don't expose MQTT broker port in docker compose setup by default
@@ -44,6 +74,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Add general troubleshooting page
 
 ## 23.9.0 - 23-09-23
+
 * Update pg-gvm to 22.6.1
 * Improve description of GSA and its build process in the source build
 * Use Debian 12 bookworm also for the community container docs
@@ -57,6 +88,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Replace docker-compose v1 with Docker Compose v2
 
 ## 23.7.0 – 23-07-25
+
 * Update gvmd to 22.6.0
 * Update gsad to 22.5.1
 * Update GSA to 22.5.3
@@ -70,6 +102,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
   community containers
 
 ## 23.6.2 – 23-06-27
+
 * Update to use Debian 12 (bookworm)
 * Install GSA from pre-built distributable files
 * Update openvas-smb to 22.5.3
@@ -81,6 +114,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Update source build instructions for Fedora 38
 
 ## 23.6.1 – 23-06-15
+
 * Update gvm-libs to 22.6.3
 * Update notus-scanner to 22.5.0
 * Update openvas-scanner to 22.7.2
@@ -89,6 +123,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Don't install old `greenbone-nvt-sync` script anymore
 
 ## 23.6.0 – 23-06-15
+
 * Fix tab title in *Setting up sudo for Scanning* section from Debian/CentOS to
   Debian/Ubuntu.
 * Update notus-scanner to 22.4.5
@@ -97,6 +132,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Add a section about update help to FAQ
 
 ## 23.3.0 – 23-03-08
+
 * Unify the directory layout of the documentation files
 * Use distinct installation directories for each component
 * Add missing python3-gnupg as dependency to ospd-openvas
@@ -114,6 +150,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
   build to allow using $INSTALL_PREFIX when setting the $PATH.
 
 ## 23.1.1 – 23-01-31
+
 * Set `table_drive_lsc = yes` setting for openvas scanner to enable local
   security checks scanning via notus scanner
 * Remove docs for 21.04 because it is end-of-life and wont get any updates
@@ -126,10 +163,12 @@ and this project adheres to [Calendar Versioning](https://calver.org).
   services
 
 ## 23.1.0 – 23-01-13
+
 * Fix installing ospd-openvas and notus-scanner on Debian 11
 * Update components to 22.4.1 release
 
 ## 22.12.0 – 22-12-27
+
 * Fix setting executable permission for setup and install script after the
   download
 * Check for docker being installed in setup and install script
@@ -152,6 +191,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Update docker compose requirement to 1.29.0
 
 ## 22.8.2 – 22-08-31
+
 * Improve feed sync documentation for source build
 * Use feed data containers for feed sync in Greenbone Community Containers docs
 * Extract workflows and troubleshooting to own pages for Greenbone Community
@@ -161,6 +201,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Use notus-scanner 22.4.1 and ospd-openvas 22.4.1 for 22.4 source build
 
 ## 22.8.1 – 2022-08-29
+
 * Add workflow for exposing the gvmd unix socket from the container
 * Add an API page for links to our other community documentation
 * Fix path of the notus-scanner product advisories directory for the 22.4
@@ -168,6 +209,7 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Add gvm-tools container and usage workflow documentation
 
 ## 22.8.0 – 2022-08-16
+
 * Fix Community Container setup and start script
 * Fix installing yarn from third party debian package repository
 * Improve and extend feed sync chapters for community containers
@@ -178,9 +220,11 @@ and this project adheres to [Calendar Versioning](https://calver.org).
   new features like dark mode
 
 ## 22.7.0 – 2022-07-25
+
 * Update docs for supporting 22.4 release
 
 ## 22.5.0 – 2022-05-30
+
 * New Greenbone Community Containers documentation
 * Update index page, history, architecture, faq and glossary for adjusted terms
   and naming.
@@ -188,38 +232,46 @@ and this project adheres to [Calendar Versioning](https://calver.org).
 * Re-arrange page structure and therefore the URLs of the documents
 
 ## 22.3.3 – 2022-03-31
+
 * Fix setting cmake parameter of runtime directory for gvmd
 * Fix starting the correct postgresql cluster
 
 ## 22.3.2 – 2022-03-30
+
 * The build guide uses Debian Stable (Bullseye)
 * Fix installing dependencies of gvmd and openvas-scanner for Debian Bullseye
 * Remove obsolete cmake parameter when building gvm-libs to avoid a warning
 
 ## 22.3.1 – 2022-03-21
+
 * Fix runtime directory for gvmd in systemd service file
 * Add runtime directory and mode for gsad in systemd service file
 
 ## 22.3.0 – 2022-03-07
+
 * Fix source paths for gsad
 * Fix build and installation of GSA
 * Add hint about yarn package on Debian
 * Fix PIDFile settings in systemd service files for gsad and gvmd
 
 ## 22.2.0 – 2022-02-24
+
 * Drop GVM 20.8.
 * Split of GSA and gsad
 * Merge of ospd and ospd-openvas
 
 ## 21.10.1 – 2021-10-13
+
 * Drop usage of gsa-node-modules. These tarballs are only useful for specific
   nodejs versions.
 
 ## 21.10.0 – 2021-10-12
+
 * Update for GVM 21.4.3 and 20.8.4 releases
 * Mark GVM 20.08 as end-of-life. User should switch to 21.04.
 
 ## 21.8.0 – 2021-08-05
+
 * Update for GVM 21.4.2 and 20.8.3 releases
 * Changed feed look file location to `/var/lib/gvm/feed-update.lock`. This file
   is used by `gvmd` and `greenbone-feed-sync`
@@ -228,4 +280,5 @@ and this project adheres to [Calendar Versioning](https://calver.org).
   the admin user
 
 ## 21.7.0 – 2021-07-05
+
 * Initial version

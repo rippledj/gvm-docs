@@ -29,24 +29,9 @@ export OPENVAS_SMB_VERSION=22.5.3
        libglib2.0-dev \
        libpopt-dev \
        libunistring-dev \
-       heimdal-dev \
+       heimdal-multidev \
        perl-base
 
-  .. tab:: Fedora
-   .. code-block::
-     :caption: Required dependencies for openvas-smb
-
-     sudo dnf install -y \
-       glib2-devel \
-       gnutls-devel \
-       popt-devel \
-       mingw64-gcc \
-       libunistring-devel \
-       heimdal-devel \
-       perl
-
-       sudo cp /usr/lib64/heimdal/lib/pkgconfig/heimdal-gssapi.pc /lib64/pkgconfig/heimdal-gssapi.pc
-       sudo cp /usr/lib64/heimdal/lib/pkgconfig/heimdal-krb5.pc /lib64/pkgconfig/heimdal-krb5.pc
 ```
 
 ```{code-block}
@@ -76,19 +61,21 @@ tar -C $SOURCE_DIR -xvzf $SOURCE_DIR/openvas-smb-$OPENVAS_SMB_VERSION.tar.gz
 ```{code-block}
 :caption: Building openvas-smb
 
-mkdir -p $BUILD_DIR/openvas-smb && cd $BUILD_DIR/openvas-smb
+mkdir -p $BUILD_DIR/openvas-smb
 
-cmake $SOURCE_DIR/openvas-smb-$OPENVAS_SMB_VERSION \
+cmake \
+  -S $SOURCE_DIR/openvas-smb-$OPENVAS_SMB_VERSION \
+  -B $BUILD_DIR/openvas-smb \
   -DCMAKE_INSTALL_PREFIX=$INSTALL_PREFIX \
   -DCMAKE_BUILD_TYPE=Release
 
-make -j$(nproc)
+cmake --build $BUILD_DIR/openvas-smb -j$(nproc)
 ```
 
 ```{code-block}
 :caption: Installing openvas-smb
 
-mkdir -p $INSTALL_DIR/openvas-smb
+mkdir -p $INSTALL_DIR/openvas-smb && cd $BUILD_DIR/openvas-smb
 
 make DESTDIR=$INSTALL_DIR/openvas-smb install
 

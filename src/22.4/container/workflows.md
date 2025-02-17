@@ -10,14 +10,14 @@ be done with:
 ---
 caption: Downloading the Greenbone Community Containers
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition pull
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml pull
 ```
 
 ```{code-block} shell
 ---
 caption: Starting the Greenbone Community Containers
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition up -d
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml up -d
 ```
 
 ## Performing a Feed Synchronization
@@ -52,7 +52,7 @@ To download the latest feed data container images run
 ---
 caption: Downloading the Greenbone Community Edition feed data containers
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition pull notus-data vulnerability-tests scap-data dfn-cert-data cert-bund-data report-formats data-objects
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml pull notus-data vulnerability-tests scap-data dfn-cert-data cert-bund-data report-formats data-objects
 ```
 
 To copy the data from the images to the volumes run
@@ -61,7 +61,7 @@ To copy the data from the images to the volumes run
 ---
 caption: Starting the Greenbone Community feed data containers
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition up -d notus-data vulnerability-tests scap-data dfn-cert-data cert-bund-data report-formats data-objects
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml up -d notus-data vulnerability-tests scap-data dfn-cert-data cert-bund-data report-formats data-objects
 ```
 
 ### Loading the Feed Changes
@@ -90,6 +90,7 @@ take a few minutes, please wait...
 ```
 
 The loading of the VT data is finished if the log message can be found:
+
 ```{code-block} none
 ---
 caption: ospd-openvas VTs loading finished log message
@@ -232,10 +233,10 @@ by running:
 ---
 caption: Remove containers and volumes (all data)
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition down -v
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml down -v
 ```
 
-##  Gaining a Terminal for a Container
+## Gaining a Terminal for a Container
 
 If you want to debug something in a container, install additional software, take
 a look at the file content, or change some configuration, it is possible to gain
@@ -247,7 +248,7 @@ To access a container with a bash shell as a root user, you can run:
 ---
 caption: Gain a Terminal for a Container
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition exec <container-name> /bin/bash
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml exec <container-name> /bin/bash
 ```
 
 Afterwards, you can execute standard bash commands within the running container.
@@ -262,7 +263,7 @@ can be started with:
 ---
 caption: Start container for gvm-tools CLI access
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition run --rm gvm-tools
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml run --rm gvm-tools
 ```
 
 Afterwards, a bash shell is provided and `gvm-cli`, `gvm-pyshell` or `gvm-script`
@@ -322,7 +323,7 @@ In the next step, the docker compose file must be changed as follows:
 After restarting the containers with
 
 ```bash
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition up -d
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml up -d
 ```
 
 the Unix socket should be available at `/tmp/gvm/gvmd/gvmd.sock`. For example,
@@ -360,7 +361,7 @@ caption: Use a local network relay without authorization
 ---
 ...
   gvmd:
-    image: greenbone/gvmd:stable
+    image: registry.community.greenbone.net/community/gvmd:stable
     environment:
       - MTA_HOST=postfix-server.example.org
       - MTA_PORT=25
@@ -369,13 +370,14 @@ caption: Use a local network relay without authorization
       - MTA_AUTH=off
 ...
 ```
+
 ```{code-block} yaml
 ---
 caption: Use the Google Mail services with SSL and authorization
 ---
 ...
   gvmd:
-    image: greenbone/gvmd:stable
+    image: registry.community.greenbone.net/community/gvmd:stable
     environment:
       - MTA_HOST=smtp.gmail.com
       - MTA_PORT=587
@@ -393,34 +395,48 @@ caption: Use the Google Mail services with SSL and authorization
 
 ## Setting up SSL/TLS for GSA
 
-Enabling SSL/TLS for the the web interface ({term}`GSA`) requires generating a private key and public certificate, and adjusting the `gsa` container settings in the `docker-compose.yml` file.  
+Enabling SSL/TLS for the the web interface ({term}`GSA`) requires generating a
+private key and public certificate, and adjusting the `gsa` container settings
+in the `docker-compose.yml` file.
 
-As of September 2020, the maximum validity period for publicly trusted SSL/TLS certificates is 398 days. An expiration date of more than 397 days is not valid and may cause some browsers to block the connection. OpenSSL can be used to generate the private key and certificate:
+As of September 2020, the maximum validity period for publicly trusted SSL/TLS
+certificates is 398 days. An expiration date of more than 397 days is not valid
+and may cause some browsers to block the connection. OpenSSL can be used to
+generate the private key and certificate:
 
 ```{code-block} yaml
 openssl req -x509 -newkey rsa:4096 -keyout serverkey.pem -out servercert.pem -nodes -days 397
 ```
 
-The user that executes the `docker compose` command must have read access to the private key and certificate.  So, they must be placed in an appropriate location such as the user's home directory or the `tmp` directory.
+The user that executes the `docker compose` command must have read access to the
+private key and certificate.  So, they must be placed in an appropriate location
+such as the user's home directory or the `tmp` directory.
 
 ```{code-block} yaml
-mkdir $HOME/.ssl && mv serverkey.pem servercert.pem $HOME/.ssl  
+mkdir $HOME/.ssl && mv serverkey.pem servercert.pem $HOME/.ssl
 ```
 
-Finally, the {term}`GSA` configuration in the `docker-compose.yml` file must be modified to enable SSL/TLS. The changes include:
+Finally, the {term}`GSA` configuration in the `docker-compose.yml` file must be
+modified to enable SSL/TLS. The changes include:
 
-1. Setting the `GSAD_ARGS` environment variable to initialize SSL/TLS. In the example below, three arguments are set. A complete list of {term}`GSAD` arguments are in the gsad manpage (execute `gsad --help` from within the GSA container), and in the [GSAD documentation](https://github.com/greenbone/gsad/tree/main/doc) in its GitHub repository. The arguments used in this example are:
+1. Setting the `GSAD_ARGS` environment variable to initialize SSL/TLS. In the
+example below, three arguments are set. A complete list of {term}`GSAD`
+arguments are in the gsad manpage (execute `gsad --help` from within the GSA
+container), and in the [gsad documentation](https://github.com/greenbone/gsad/tree/main/doc)
+in its GitHub repository. The arguments used in this example are:
     - `--no-redirect`: Don't redirect HTTP to HTTPS and only allow HTTPS connections to the web interface
     - `--http-sts`: Enables HSTS (HTTP Strict Transport Security) for the GSAD web-server
-    - `--gnutls-priorities`: Disables insecure versions of TLS (1.0 and 1.1)  
-2. Copying the private key and certificate files from the host system into the GSA container upon initialization.
-3. Changing the web interface port to the standard SSL/TLS port 443 and optionally enabling remote access
-
+    - `--gnutls-priorities`: Disables insecure versions of TLS (1.0 and 1.1)
+2. Copying the private key and certificate files from the host system into the
+GSA container upon initialization.
+3. Changing the web interface port to the standard SSL/TLS port 443 and
+optionally enabling remote access
 
 Sample `gsa` container settings to enable SSL/TLS:
+
 ```diff
 gsa:
-  image: greenbone/gsa:stable
+  image: registry.community.greenbone.net/community/gsa:stable
   restart: on-failure
 + environment:
 +   - GSAD_ARGS=--no-redirect --http-sts --gnutls-priorities=SECURE256:-VERS-TLS-ALL:+VERS-TLS1.2:+VERS-TLS1.3
@@ -440,11 +456,12 @@ gsa:
     - gvmd
 ```
 
-After modifying the `docker-compose.yml` file, restart the containers to enable the changes.
+After modifying the `docker-compose.yml` file, restart the containers to enable
+the changes.
 
 ```{code-block} shell
 ---
 caption: Restart the Greenbone Community Containers
 ---
-docker compose -f $DOWNLOAD_DIR/docker-compose.yml -p greenbone-community-edition up -d
+docker compose -f $DOWNLOAD_DIR/docker-compose.yml up -d
 ```
